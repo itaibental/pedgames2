@@ -1,27 +1,70 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הגדרות משחק - גלגל המזל</title>
-    <link rel="stylesheet" href="teacher.css">
+    <title>אזור ניהול מורה - pedgames</title>
+    <link rel="stylesheet" href="teacher-dashboard.css">
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">חזרה לרשימת המשחקים</a>
-        <h1>הגדרת גלגל המזל</h1>
-        <p>בעמוד זה ניתן להגדיר את המושגים והשאלות שיופיעו במשחק. הנתונים נשמרים באופן אוטומטי בדפדפן.</p>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://storage.googleapis.com/project-deforestation-images/pedgames_logo.png" alt="pedgames logo">
+                <span>pedgames</span>
+            </div>
+            <nav>
+                <a href="index.html">דף הבית</a>
+                <a href="games.html">המשחקיה</a>
+                <a href="teacher.html" class="active">אזור מורה</a>
+                <a href="#">עלינו</a>
+                <a href="#">צור קשר</a>
+            </nav>
+        </div>
+    </header>
 
-        <div id="topics-container">
-            <h2>מושגים ושאלות</h2>
-            <!-- Topics will be added here dynamically -->
+    <main class="main-container">
+        <div class="title-container">
+            <h1>אזור ניהול מורה - pedgames</h1>
+            <p>נהל, ערוך, ונצח את הלמידה</p>
         </div>
 
-        <button id="add-topic-btn" class="btn">הוסף מושג חדש</button>
-        <button id="save-btn" class="btn primary">שמור נתונים</button>
-        <p id="save-feedback" class="feedback"></p>
-    </div>
+        <div class="dashboard-grid">
+            <!-- Card 1: Game Management -->
+            <div class="dashboard-card">
+                <img src="https://storage.googleapis.com/project-deforestation-images/management_card.png" alt="ניהול ועריכת משחקים" class="card-image">
+                <div class="card-content">
+                    <h3>ניהול ועריכת משחקים</h3>
+                    <p>ערוך תוכן, עדכן גרסאות, ונהל שלבים.</p>
+                    <a href="teacher-edit-game.html" class="card-button">ערוך משחק</a>
+                </div>
+            </div>
 
-    <script src="teacher.js"></script>
+            <!-- Card 2: Class Management -->
+            <div class="dashboard-card">
+                <img src="https://storage.googleapis.com/project-deforestation-images/students_card.png" alt="ניהול תלמידים וכיתות" class="card-image">
+                <div class="card-content">
+                    <h3>ניהול תלמידים וכיתות</h3>
+                    <p>צור קבוצות, נהל פרופילים, ושלח משימות.</p>
+                    <a href="teacher-classes.html" class="card-button">רשימת כיתות</a>
+                </div>
+            </div>
+
+            <!-- Card 3: Reports and Analytics -->
+            <div class="dashboard-card">
+                <img src="https://storage.googleapis.com/project-deforestation-images/reports_card.png" alt="ניטור הישגים ודוחות" class="card-image">
+                <div class="card-content">
+                    <h3>ניטור הישגים ודוחות</h3>
+                    <p>צפה בביצועים, נתח נתונים, והתקדמות כיתתית.</p>
+                    <a href="#" class="card-button">לוח בקרה</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 pedgames | כל הזכויות שמורות</p>
+    </footer>
 </body>
 </html>
