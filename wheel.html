@@ -1,4 +1,5 @@
-אני ר<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -31,5 +32,41 @@
     </div>
 
     <script src="wheel.js"></script>
+    <script>
+        // Function to automatically save student activity
+        function autoSaveActivity() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentName = urlParams.get('fullname');
+            const studentClass = urlParams.get('classname');
+
+            if (studentName && studentClass) {
+                console.log(`Starting activity tracking for ${studentName} from class ${studentClass}.`);
+
+                setInterval(() => {
+                    const timestamp = new Date().toISOString();
+                    const activityData = {
+                        studentName,
+                        studentClass,
+                        timestamp,
+                        activity: 'Playing Wheel of Fortune'
+                    };
+
+                    // Retrieve existing activity log or initialize a new one
+                    let activityLog = JSON.parse(localStorage.getItem('studentActivityLog')) || [];
+                    
+                    // Add new activity
+                    activityLog.push(activityData);
+
+                    // Save updated log to localStorage
+                    localStorage.setItem('studentActivityLog', JSON.stringify(activityLog));
+                    
+                    console.log('Activity saved at:', timestamp);
+                }, 30000); // Save every 30 seconds
+            }
+        }
+
+        // Start the auto-save process when the page loads
+        window.onload = autoSaveActivity;
+    </script>
 </body>
 </html>
