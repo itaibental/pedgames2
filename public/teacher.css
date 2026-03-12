@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  direction: rtl;
+}
+
+#topics-container, #quizzes-container {
+  margin-bottom: 30px;
+}
+
+#topics-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#topics-list li {
+  margin-bottom: 10px;
+}
+
+#quiz-editor .question {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#quiz-editor .options {
+  list-style-type: none;
+  padding: 0;
+}
+
+#quiz-editor .options li {
+  margin-bottom: 5px;
+}

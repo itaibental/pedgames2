@@ -1,0 +1,44 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  text-align: center;
+}
+
+.wheel-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+#wheel-canvas {
+  transition: transform 10s ease-out;
+}
+
+#spin-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+#quiz-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.question {
+  margin-bottom: 15px;
+}
+
+.options {
+  list-style-type: none;
+  padding: 0;
+}
+
+.options li {
+  margin-bottom: 5px;
+}

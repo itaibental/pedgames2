@@ -1,0 +1,12 @@
+{
+  "name": "learning-games",
+  "version": "1.0.0",
+  "description": "A platform for educational games with teacher and student interfaces.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
