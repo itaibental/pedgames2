@@ -1,0 +1,69 @@
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+}
+
+.main-container {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.title-container h1 {
+    font-size: 2.5rem;
+    color: #0056b3;
+}
+
+.title-container p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 40px;
+}
+
+/* Monitoring Container */
+.monitoring-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: right;
+}
+
+.monitoring-container h2 {
+    font-size: 1.8rem;
+    color: #0056b3;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+}
+
+/* Activity Log Table */
+#activity-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#activity-log-table th, #activity-log-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: right;
+}
+
+#activity-log-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#activity-log-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#activity-log-table tbody tr:hover {
+    background-color: #f1f1f1;
+}

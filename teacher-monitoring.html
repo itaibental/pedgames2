@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניטור ודוחות - pedgames</title>
+    <link rel="stylesheet" href="teacher-dashboard.css"> 
+    <link rel="stylesheet" href="teacher-monitoring.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://storage.googleapis.com/project-deforestation-images/pedgames_logo.png" alt="pedgames logo">
+                <span>pedgames</span>
+            </div>
+            <nav>
+                <a href="index.html">דף הבית</a>
+                <a href="games.html">המשחקיה</a>
+                <a href="teacher.html" class="active">אזור מורה</a>
+                <a href="#">עלינו</a>
+                <a href="#">צור קשר</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="title-container">
+            <h1>ניטור פעילות ודוחות</h1>
+            <p>כאן תוכל לעקוב אחר פעילות התלמידים במערכת.</p>
+        </div>
+
+        <div class="monitoring-container">
+            <h2>יומן פעילות תלמידים</h2>
+            <table id="activity-log-table">
+                <thead>
+                    <tr>
+                        <th>שם התלמיד</th>
+                        <th>כיתה</th>
+                        <th>פעילות</th>
+                        <th>חותמת זמן</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Activity data will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2024 pedgames | כל הזכויות שמורות</p>
+    </footer>
+
+    <script>
+        function displayActivityLog() {
+            const activityLog = JSON.parse(localStorage.getItem('studentActivityLog')) || [];
+            const tableBody = document.querySelector('#activity-log-table tbody');
+
+            tableBody.innerHTML = ''; // Clear existing table data
+
+            if (activityLog.length === 0) {
+                const row = tableBody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 4;
+                cell.textContent = 'לא נמצאה פעילות תלמידים.';
+                cell.style.textAlign = 'center';
+                return;
+            }
+
+            // Populate table with activity data, showing the most recent first
+            activityLog.reverse().forEach(activity => {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = activity.studentName;
+                row.insertCell().textContent = activity.studentClass;
+                row.insertCell().textContent = activity.activity;
+                row.insertCell().textContent = new Date(activity.timestamp).toLocaleString('he-IL');
+            });
+        }
+
+        // Display the log when the page loads and refresh every 5 seconds
+        window.onload = () => {
+            displayActivityLog();
+            setInterval(displayActivityLog, 5000); // Auto-refresh the log
+        };
+    </script>
+</body>
+</html>
