@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const wheel = document.querySelector('.wheel');
     const spinBtn = document.getElementById('spin-btn');
@@ -6,62 +7,104 @@ document.addEventListener('DOMContentLoaded', () => {
     const questionText = document.getElementById('question-text');
     const optionsContainer = document.querySelector('.options');
     const nextQuestionBtn = document.getElementById('next-question-btn');
+    const conceptsContainer = document.querySelector('.concepts');
 
-    let gameData = JSON.parse(localStorage.getItem('wheelGameData')) || {};
-    let topics = gameData.topics || [];
-    let quizzes = gameData.quizzes || {};
-    let currentTopicIndex = 0;
-    let currentQuestionIndex = 0;
+    let concepts = [];
+    let quizzes = {};
     let rotation = 0;
-    const segmentAngle = 360 / topics.length;
+
+    // Fetch data from data.json
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data.wheelGame && data.wheelGame.topics) {
+                concepts = data.wheelGame.topics;
+                quizzes = data.wheelGame.quizzes || {};
+                if (concepts.length > 0) {
+                    createWheel();
+                    spinBtn.disabled = false;
+                } else {
+                    displayNoDataMessage();
+                }
+            } else {
+                displayNoDataMessage();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            displayNoDataMessage();
+        });
+    
+    function displayNoDataMessage() {
+        conceptsContainer.textContent = 'לא נמצאו מושגים. יש להגדיר נושאים ושאלות בקובץ data.json.';
+        spinBtn.disabled = true;
+    }
 
     function createWheel() {
-        wheel.innerHTML = '';
-        if (topics.length === 0) {
-            // Display a message if no topics are set
-            const message = document.createElement('div');
-            message.textContent = 'יש להגדיר נושאים ושאלות בעמוד המורה.';
-            message.style.textAlign = 'center';
-            message.style.marginTop = '50px';
-            wheel.parentElement.appendChild(message);
-            spinBtn.disabled = true;
-            return;
-        }
+        conceptsContainer.innerHTML = '';
+        const segmentAngle = 360 / concepts.length;
+        const colors = generateColors(concepts.length);
         
-        topics.forEach((topic, index) => {
-            const segment = document.createElement('div');
-            segment.className = 'segment';
-            segment.textContent = topic;
-            const rotateAngle = segmentAngle * index + segmentAngle / 2;
-            segment.style.transform = `rotate(${rotateAngle}deg) translate(100px) rotate(-90deg)`;
-            wheel.appendChild(segment);
+        const gradientParts = concepts.map((concept, index) => {
+            const startAngle = index * segmentAngle;
+            const endAngle = (index + 1) * segmentAngle;
+            return `${colors[index]} ${startAngle}deg ${endAngle}deg`;
+        });
+        
+        wheel.style.background = `conic-gradient(from 0deg, ${gradientParts.join(', ')})`;
+
+        concepts.forEach((concept, index) => {
+            const angle = (index * segmentAngle) + (segmentAngle / 2);
+            const textElement = document.createElement('div');
+            textElement.className = 'concept';
+            textElement.textContent = concept;
+            // Position text in a circle around the wheel
+            const radius = wheel.offsetWidth / 2 + 30; // 30px padding from the wheel
+            const x = Math.cos(angle * Math.PI / 180) * radius + radius - 10;
+            const y = Math.sin(angle * Math.PI / 180) * radius + radius - 10;
+            //textElement.style.transform = `translate(${x}px, ${y}px) rotate(${angle + 90}deg)`;
+             textElement.style.transform = `rotate(${angle}deg) translate(140px) rotate(-90deg)`;
+            conceptsContainer.appendChild(textElement);
         });
     }
 
+    function generateColors(count) {
+        const colors = [];
+        const hueStep = 360 / count;
+        for (let i = 0; i < count; i++) {
+            colors.push(`hsl(${i * hueStep}, 70%, 60%)`);
+        }
+        return colors;
+    }
+    
     function spinWheel() {
-        const randomSpins = Math.floor(Math.random() * 5) + 5; // 5 to 9 full spins
-        const randomStop = Math.floor(Math.random() * 360);
-        rotation += (360 * randomSpins) + randomStop;
+        const selectedIndex = Math.floor(Math.random() * concepts.length);
+        const segmentAngle = 360 / concepts.length;
+        // Calculate the angle to stop at the middle of the selected segment
+        const stopAngle = (360 - (selectedIndex * segmentAngle) - (segmentAngle / 2)) % 360;
         
+        // Add multiple spins for visual effect
+        const randomSpins = Math.floor(Math.random() * 4) + 5; // 5 to 8 full spins
+        rotation = (360 * randomSpins) + stopAngle;
+        
+        wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
         wheel.style.transform = `rotate(${rotation}deg)`;
 
+        // After the spin animation ends
         setTimeout(() => {
-            const actualRotation = rotation % 360;
-            const selectedSegment = Math.floor((360 - actualRotation) / segmentAngle);
-            currentTopicIndex = selectedSegment % topics.length;
-            showQuestion();
-        }, 5000); // Corresponds to the transition duration
+            const currentTopic = concepts[selectedIndex];
+            showQuestion(currentTopic);
+        }, 5000); 
     }
 
-    function showQuestion() {
-        const topic = topics[currentTopicIndex];
+    function showQuestion(topic) {
         const quiz = quizzes[topic];
         if (!quiz || !quiz.questions || quiz.questions.length === 0) {
             alert(`אין שאלות עבור הנושא: ${topic}`);
             return;
         }
 
-        currentQuestionIndex = Math.floor(Math.random() * quiz.questions.length);
+        const currentQuestionIndex = Math.floor(Math.random() * quiz.questions.length);
         const question = quiz.questions[currentQuestionIndex];
 
         questionTitle.textContent = topic;
@@ -75,29 +118,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = document.createElement('button');
             button.className = 'option-btn';
             button.textContent = option;
-            button.addEventListener('click', () => checkAnswer(button, option === question.correctAnswer));
+            button.addEventListener('click', () => checkAnswer(button, option === question.correctAnswer, question.correctAnswer));
             optionsContainer.appendChild(button);
         });
 
         modal.style.display = 'flex';
     }
-
-    function checkAnswer(button, isCorrect) {
+    
+    function checkAnswer(button, isCorrect, correctAnswer) {
         const buttons = optionsContainer.querySelectorAll('.option-btn');
         buttons.forEach(btn => {
-            btn.disabled = true; // Disable all buttons
-            if (btn.textContent === (isCorrect ? button.textContent : 'some-other-content')) { // Highlight correct/incorrect
-                 if(isCorrect){
-                    btn.classList.add( 'correct');
-                }else{
-                    btn.classList.add( 'incorrect');
-                }
-            } 
+            btn.disabled = true;
+            if (btn.textContent === correctAnswer) {
+                btn.classList.add('correct');
+            } else if (btn === button && !isCorrect) {
+                btn.classList.add('incorrect');
+            }
         });
-
-        if (isCorrect) {
-            // You can add points or other logic here
-        }
 
         nextQuestionBtn.style.display = 'block';
     }
@@ -115,6 +152,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     spinBtn.addEventListener('click', spinWheel);
-
-    createWheel();
 });

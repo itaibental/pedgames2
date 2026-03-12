@@ -35,28 +35,29 @@ body {
     border-radius: 50%;
     border: 10px solid #fff;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    background: conic-gradient(from 0deg, #ff9999 0 45deg, #99ff99 45deg 90deg, #9999ff 90deg 135deg, #ffff99 135deg 180deg, #ff99ff 180deg 225deg, #99ffff 225deg 270deg, #ffcc99 270deg 315deg, #cccccc 315deg 360deg);
     transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
     position: relative;
 }
 
-.segment {
+.concepts {
     position: absolute;
-    width: 50%;
-    height: 50%;
-    top: 25%;
-    left: 25%;
-    transform-origin: 100% 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
+.concept {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
 
 .pointer {
     position: absolute;
@@ -69,6 +70,7 @@ body {
     border-right: 20px solid transparent;
     border-top: 40px solid #e74c3c; /* Red pointer */
     z-index: 10;
+    top: -5px; /* Adjust to point at the edge */
 }
 
 /* Spin button */
