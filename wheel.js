@@ -1,5 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
     const wheel = document.querySelector('.wheel');
     const spinBtn = document.getElementById('spin-btn');
     const modal = document.getElementById('question-modal');
@@ -17,12 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            if (data.wheelGame && data.wheelGame.topics) {
-                concepts = data.wheelGame.topics;
-                quizzes = data.wheelGame.quizzes || {};
+            console.log('Data fetched:', data);
+            if (data.topics && data.quizzes) {
+                concepts = data.topics;
+                quizzes = data.quizzes;
                 if (concepts.length > 0) {
                     createWheel();
                     spinBtn.disabled = false;
+                    console.log('Wheel created');
                 } else {
                     displayNoDataMessage();
                 }
@@ -36,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
     function displayNoDataMessage() {
+        console.log('Displaying no data message');
         conceptsContainer.textContent = 'לא נמצאו מושגים. יש להגדיר נושאים ושאלות בקובץ data.json.';
         spinBtn.disabled = true;
     }
@@ -78,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function spinWheel() {
+        console.log('Spinning the wheel...');
         const selectedIndex = Math.floor(Math.random() * concepts.length);
         const segmentAngle = 360 / concepts.length;
         // Calculate the angle to stop at the middle of the selected segment
@@ -152,4 +157,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     spinBtn.addEventListener('click', spinWheel);
+    console.log('Event listener for spin button added');
 });
