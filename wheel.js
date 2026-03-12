@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const randomSpins = Math.floor(Math.random() * 4) + 5; // 5 to 8 full spins
         rotation = (360 * randomSpins) + stopAngle;
         
-        wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
         wheel.style.transform = `rotate(${rotation}deg)`;
 
         // After the spin animation ends
