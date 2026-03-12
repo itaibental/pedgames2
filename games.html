@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ברוכים הבאים ל-pedgames</title>
-    <link rel="stylesheet" href="style.css">
+    <title>המשחקיה - pedgames</title>
+    <link rel="stylesheet" href="games.css">
 </head>
 <body>
     <header>
@@ -16,9 +16,8 @@
             </div>
             <nav>
                 <a href="index.html">דף הבית</a>
-                <a href="games.html">קטלוג משחקים</a>
+                <a href="games.html" class="active">המשחקיה</a>
                 <a href="teacher.html">אזור מורה</a>
-                <a href="games.html">למשחקיה</a>
                 <a href="#">עלינו</a>
                 <a href="#">צור קשר</a>
             </nav>
@@ -26,18 +25,23 @@
     </header>
 
     <main class="main-container">
-        <h1>ברוכים הבאים ל-pedgames!</h1>
-        <div class="cards-container">
-            <div class="card">
-                <h2>למשחקיה</h2>
-                <p>עולם שלם של משחקים חינוכיים, כיף ואתגר לכל הגילאים.</p>
-                <a href="games.html" class="card-button game-btn">להתחלת המשחק!</a>
+        <div class="title-container">
+            <h1>המשחקיה</h1>
+        </div>
+
+        <div class="game-grid">
+            <!-- Game 1: Wheel of Fortune -->
+            <div class="game-card">
+                <img src="https://storage.googleapis.com/project-deforestation-images/game_card_placeholder.png" alt="גלגל המושגים" class="game-card-image">
+                <div class="game-card-content">
+                    <h3>גלגל המושגים</h3>
+                    <p>סובבו את הגלגל ולמדו מושגים חדשים בצורה מהנה!</p>
+                    <a href="wheel.html" class="play-button">שחק עכשיו!</a>
+                </div>
             </div>
-            <div class="card">
-                <h2>אזור מורה</h2>
-                <p>ניהול כיתות, מעקב התקדמות ומשאבי הוראה בלעדיים.</p>
-                <a href="teacher.html" class="card-button teacher-btn">כניסה למורים</a>
-            </div>
+
+            <!-- Add more games here -->
+
         </div>
     </main>
 
