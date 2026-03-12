@@ -4,69 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>גלגל המזל</title>
+    <title>גלגל המזל - pedgames</title>
     <link rel="stylesheet" href="wheel.css">
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" style="position: absolute; top: 20px; left: 20px; text-decoration: none; font-weight: bold; color: #0056b3;">חזרה</a>
-        <h1>גלגל המזל</h1>
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <div class="wheel">
-                <div class="concepts"></div>
-            </div>
-        </div>
-        <button id="spin-btn">סובב את הגלגל!</button>
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel"></div>
+        <div class="wheel-center">pedgames</div>
     </div>
-
-    <div id="question-modal" class="modal">
-        <div class="modal-content">
-            <h2 id="question-title"></h2>
-            <p id="question-text"></p>
-            <div class="options">
-                <!-- Options will be here -->
-            </div>
-            <button id="next-question-btn">המשך</button>
-        </div>
-    </div>
+    
+    <button class="spin-button">סובב את הגלגל!</button>
 
     <script src="wheel.js"></script>
-    <script>
-        // Function to automatically save student activity
-        function autoSaveActivity() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const studentName = urlParams.get('fullname');
-            const studentClass = urlParams.get('classname');
-
-            if (studentName && studentClass) {
-                console.log(`Starting activity tracking for ${studentName} from class ${studentClass}.`);
-
-                setInterval(() => {
-                    const timestamp = new Date().toISOString();
-                    const activityData = {
-                        studentName,
-                        studentClass,
-                        timestamp,
-                        activity: 'Playing Wheel of Fortune'
-                    };
-
-                    // Retrieve existing activity log or initialize a new one
-                    let activityLog = JSON.parse(localStorage.getItem('studentActivityLog')) || [];
-                    
-                    // Add new activity
-                    activityLog.push(activityData);
-
-                    // Save updated log to localStorage
-                    localStorage.setItem('studentActivityLog', JSON.stringify(activityLog));
-                    
-                    console.log('Activity saved at:', timestamp);
-                }, 30000); // Save every 30 seconds
-            }
-        }
-
-        // Start the auto-save process when the page loads
-        window.onload = autoSaveActivity;
-    </script>
 </body>
 </html>

@@ -1,160 +1,87 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
     const wheel = document.querySelector('.wheel');
-    const spinBtn = document.getElementById('spin-btn');
-    const modal = document.getElementById('question-modal');
-    const questionTitle = document.getElementById('question-title');
-    const questionText = document.getElementById('question-text');
-    const optionsContainer = document.querySelector('.options');
-    const nextQuestionBtn = document.getElementById('next-question-btn');
-    const conceptsContainer = document.querySelector('.concepts');
+    const spinButton = document.querySelector('.spin-button');
+    const wheelCenter = document.querySelector('.wheel-center');
 
-    let concepts = [];
-    let quizzes = {};
-    let rotation = 0;
+    const sections = [
+        { label: 'בונוס 10+' },
+        { label: 'נסה שוב' },
+        { label: 'הפתעה!' },
+        { label: 'שאלה כפולה' },
+        { label: '20 נקודות' },
+        { label: 'איבוד תור' },
+        { label: 'סיבוב נוסף' },
+        { label: 'בהצלחה!' },
+        { label: 'משימה חדשה' },
+        { label: 'אתגר' },
+        { label: 'כל הכבוד!' },
+        { label: 'פסילה' },
+    ];
 
-    // Fetch data from data.json
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Data fetched:', data);
-            if (data.topics && data.quizzes) {
-                concepts = data.topics;
-                quizzes = data.quizzes;
-                if (concepts.length > 0) {
-                    createWheel();
-                    spinBtn.disabled = false;
-                    console.log('Wheel created');
-                } else {
-                    displayNoDataMessage();
-                }
-            } else {
-                displayNoDataMessage();
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            displayNoDataMessage();
-        });
-    
-    function displayNoDataMessage() {
-        console.log('Displaying no data message');
-        conceptsContainer.textContent = 'לא נמצאו מושגים. יש להגדיר נושאים ושאלות בקובץ data.json.';
-        spinBtn.disabled = true;
-    }
+    const sectionColors = [
+        '#FFC107', '#FF9800', '#FF5722', '#F44336',
+        '#E91E63', '#9C27B0', '#673AB7', '#3F51B5',
+        '#2196F3', '#03A9F4', '#00BCD4', '#009688'
+    ];
 
-    function createWheel() {
-        conceptsContainer.innerHTML = '';
-        const segmentAngle = 360 / concepts.length;
-        const colors = generateColors(concepts.length);
+    const sectionAngle = 360 / sections.length;
+
+    sections.forEach((section, i) => {
+        const sectionEl = document.createElement('div');
+        sectionEl.classList.add('section');
         
-        const gradientParts = concepts.map((concept, index) => {
-            const startAngle = index * segmentAngle;
-            const endAngle = (index + 1) * segmentAngle;
-            return `${colors[index]} ${startAngle}deg ${endAngle}deg`;
-        });
+        const rotation = sectionAngle * i;
+        const skewAngle = 90 - sectionAngle;
+
+        sectionEl.style.transform = `rotate(${rotation}deg) skewY(-${skewAngle}deg)`;
+        sectionEl.style.backgroundColor = sectionColors[i % sectionColors.length];
+
+        const content = document.createElement('div');
+        content.textContent = section.label;
+        content.style.transform = `skewY(${skewAngle}deg) rotate(${-sectionAngle / 2}deg)`;
         
-        wheel.style.background = `conic-gradient(from 0deg, ${gradientParts.join(', ')})`;
-
-        concepts.forEach((concept, index) => {
-            const angle = (index * segmentAngle) + (segmentAngle / 2);
-            const textElement = document.createElement('div');
-            textElement.className = 'concept';
-            textElement.textContent = concept;
-            // Position text in a circle around the wheel
-            const radius = wheel.offsetWidth / 2 + 30; // 30px padding from the wheel
-            const x = Math.cos(angle * Math.PI / 180) * radius + radius - 10;
-            const y = Math.sin(angle * Math.PI / 180) * radius + radius - 10;
-            //textElement.style.transform = `translate(${x}px, ${y}px) rotate(${angle + 90}deg)`;
-             textElement.style.transform = `rotate(${angle}deg) translate(140px) rotate(-90deg)`;
-            conceptsContainer.appendChild(textElement);
-        });
-    }
-
-    function generateColors(count) {
-        const colors = [];
-        const hueStep = 360 / count;
-        for (let i = 0; i < count; i++) {
-            colors.push(`hsl(${i * hueStep}, 70%, 60%)`);
-        }
-        return colors;
-    }
-    
-    function spinWheel() {
-        console.log('Spinning the wheel...');
-        const selectedIndex = Math.floor(Math.random() * concepts.length);
-        const segmentAngle = 360 / concepts.length;
-        // Calculate the angle to stop at the middle of the selected segment
-        const stopAngle = (360 - (selectedIndex * segmentAngle) - (segmentAngle / 2)) % 360;
-        
-        // Add multiple spins for visual effect
-        const randomSpins = Math.floor(Math.random() * 4) + 5; // 5 to 8 full spins
-        rotation = (360 * randomSpins) + stopAngle;
-        
-        wheel.style.transform = `rotate(${rotation}deg)`;
-
-        // After the spin animation ends
-        setTimeout(() => {
-            const currentTopic = concepts[selectedIndex];
-            showQuestion(currentTopic);
-        }, 5000); 
-    }
-
-    function showQuestion(topic) {
-        const quiz = quizzes[topic];
-        if (!quiz || !quiz.questions || quiz.questions.length === 0) {
-            alert(`אין שאלות עבור הנושא: ${topic}`);
-            return;
-        }
-
-        const currentQuestionIndex = Math.floor(Math.random() * quiz.questions.length);
-        const question = quiz.questions[currentQuestionIndex];
-
-        questionTitle.textContent = topic;
-        questionText.textContent = question.question;
-        optionsContainer.innerHTML = '';
-
-        const allOptions = [question.correctAnswer, ...question.options];
-        shuffleArray(allOptions);
-
-        allOptions.forEach(option => {
-            const button = document.createElement('button');
-            button.className = 'option-btn';
-            button.textContent = option;
-            button.addEventListener('click', () => checkAnswer(button, option === question.correctAnswer, question.correctAnswer));
-            optionsContainer.appendChild(button);
-        });
-
-        modal.style.display = 'flex';
-    }
-    
-    function checkAnswer(button, isCorrect, correctAnswer) {
-        const buttons = optionsContainer.querySelectorAll('.option-btn');
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            if (btn.textContent === correctAnswer) {
-                btn.classList.add('correct');
-            } else if (btn === button && !isCorrect) {
-                btn.classList.add('incorrect');
-            }
-        });
-
-        nextQuestionBtn.style.display = 'block';
-    }
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    nextQuestionBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        nextQuestionBtn.style.display = 'none';
+        sectionEl.appendChild(content);
+        wheel.appendChild(sectionEl);
     });
 
-    spinBtn.addEventListener('click', spinWheel);
-    console.log('Event listener for spin button added');
+    function spin() {
+        const randomSpin = Math.floor(Math.random() * 360) + 360 * 5; // Spin at least 5 times
+        wheel.style.transform = `rotate(${randomSpin}deg)`;
+
+        // Determine the winning section
+        const finalAngle = randomSpin % 360;
+        const winningIndex = Math.floor((360 - finalAngle) / sectionAngle);
+        const winningSection = sections[winningIndex];
+
+        // Log the activity
+        logStudentActivity(`Wheel spun and landed on: ${winningSection.label}`);
+
+        // Announce the winner after the spin animation
+        setTimeout(() => {
+            alert(`You landed on: ${winningSection.label}`);
+            wheel.style.transition = 'none'; // Reset transition for the next spin
+            wheel.style.transform = `rotate(${finalAngle}deg)`;
+            setTimeout(() => { wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)'; }, 50);
+        }, 5000);
+    }
+
+    spinButton.addEventListener('click', spin);
 });
+
+function logStudentActivity(activity) {
+    const studentName = localStorage.getItem("studentName") || "Unknown Student";
+    const studentClass = localStorage.getItem("studentClass") || "Unknown Class";
+
+    const logEntry = {
+        studentName,
+        studentClass,
+        activity,
+        timestamp: new Date().toISOString(),
+    };
+
+    let activityLog = JSON.parse(localStorage.getItem("studentActivityLog")) || [];
+    activityLog.push(logEntry);
+    localStorage.setItem("studentActivityLog", JSON.stringify(activityLog));
+}
+
