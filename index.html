@@ -1,25 +1,48 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>רשימת משחקים</title>
-    <link rel="stylesheet" href="games.css">
+    <title>ברוכים הבאים ל-pedgames</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>בחירת משחק</h1>
-        <div class="game-list">
-            <div class="game-card">
-                <h2>גלגל המזל</h2>
-                <p>משחק מזל וידע שבו התלמידים מסובבים גלגל ועונים על שאלות.</p>
-                <div class="game-links">
-                    <a href="wheel.html" class="btn play">שחק</a>
-                    <a href="teacher.html" class="btn settings">הגדרות</a>
-                </div>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://storage.googleapis.com/project-deforestation-images/pedgames_logo.png" alt="pedgames logo">
+                <span>pedgames</span>
             </div>
-            <!-- עוד משחקים יתווספו כאן בעתיד -->
+            <nav>
+                <a href="#">דף הבית</a>
+                <a href="#">קטלוג משחקים</a>
+                <a href="teacher.html">אזור מורה</a>
+                <a href="wheel.html">למשחקיה</a>
+                <a href="#">עלינו</a>
+                <a href="#">צור קשר</a>
+            </nav>
         </div>
-    </div>
+    </header>
+
+    <main class="main-container">
+        <h1>ברוכים הבאים ל-pedgames!</h1>
+        <div class="cards-container">
+            <div class="card">
+                <h2>למשחקיה</h2>
+                <p>עולם שלם של משחקים חינוכיים, כיף ואתגר לכל הגילאים.</p>
+                <a href="wheel.html" class="card-button game-btn">להתחלת המשחק!</a>
+            </div>
+            <div class="card">
+                <h2>אזור מורה</h2>
+                <p>ניהול כיתות, מעקב התקדמות ומשאבי הוראה בלעדיים.</p>
+                <a href="teacher.html" class="card-button teacher-btn">כניסה למורים</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 pedgames | כל הזכויות שמורות</p>
+    </footer>
 </body>
 </html>
